@@ -1,0 +1,120 @@
+// prisma/schema.prisma
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+// --- Master Tables ---
+model M_Currency {
+  id       String    @id @default(uuid())
+  code     String    @unique
+  name     String
+  symbol   String?
+  trips    Trip[]
+  profiles Profile[]
+}
+
+model M_Timezone {
+  id       String    @id @default(uuid())
+  name     String    @unique
+  offset   String?
+  trips    Trip[]
+  profiles Profile[]
+}
+
+model M_CheckItem {
+  id             String          @id @default(uuid())
+  label          String
+  category       String?
+  checklistItems ChecklistItem[]
+}
+
+model M_Activity {
+  id          String      @id @default(uuid())
+  name        String      @unique
+  category    String?
+  itineraries Itinerary[]
+}
+
+model M_Locale {
+  id       String    @id @default(uuid())
+  code     String    @unique
+  label    String
+  profiles Profile[]
+}
+
+// --- User Related ---
+model Profile {
+  id         String      @id @default(uuid())
+  user_id    String      @unique
+  nickname   String?
+  locale     M_Locale?   @relation(fields: [localeId], references: [id])
+  localeId   String?
+  currency   M_Currency? @relation(fields: [currencyId], references: [id])
+  currencyId String?
+  timezone   M_Timezone? @relation(fields: [timezoneId], references: [id])
+  timezoneId String?
+  createdAt  DateTime    @default(now())
+  updatedAt  DateTime    @updatedAt
+}
+
+model Trip {
+  id         String      @id @default(uuid())
+  user_id    String
+  title      String
+  purpose    String?
+  start_date DateTime
+  end_date   DateTime
+  currency   M_Currency? @relation(fields: [currencyId], references: [id])
+  currencyId String?
+  timezone   M_Timezone? @relation(fields: [timezoneId], references: [id])
+  timezoneId String?
+  days       Day[]
+  checklist  Checklist[]
+  createdAt  DateTime    @default(now())
+  updatedAt  DateTime    @updatedAt
+}
+
+model Day {
+  id          String      @id @default(uuid())
+  trip        Trip        @relation(fields: [tripId], references: [id])
+  tripId      String
+  date        DateTime
+  note        String?
+  itineraries Itinerary[]
+}
+
+model Itinerary {
+  id         String      @id @default(uuid())
+  day        Day         @relation(fields: [dayId], references: [id])
+  dayId      String
+  start_time DateTime
+  end_time   DateTime?
+  location   String?
+  memo       String?
+  activity   M_Activity? @relation(fields: [activityId], references: [id])
+  activityId String?
+}
+
+model Checklist {
+  id     String          @id @default(uuid())
+  trip   Trip            @relation(fields: [tripId], references: [id])
+  tripId String
+  title  String
+  items  ChecklistItem[]
+}
+
+model ChecklistItem {
+  id          String      @id @default(uuid())
+  checklist   Checklist   @relation(fields: [checklistId], references: [id])
+  checklistId String
+  checkitem   M_CheckItem @relation(fields: [checkitemId], references: [id])
+  checkitemId String
+  isChecked   Boolean     @default(false)
+}
