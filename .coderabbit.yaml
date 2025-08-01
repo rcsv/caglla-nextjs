@@ -1,0 +1,61 @@
+# .coderabbit.yaml
+
+# プロジェクト情報
+project:
+  name: Tabi no SHIORI (tabi4.me)
+  repo: https://github.com/rcsv/caglla-nextjs
+
+# エージェント設定
+agent:
+  # 利用するモデル（Codex系やお好みのモデル名を指定）
+  model: code-davinci-002
+  # コミュニケーション言語
+  language: ja
+  # 出力の一貫性を高めるため温度は低め
+  temperature: 0.0
+
+# パス設定
+paths:
+  # ソースコードのルートフォルダ
+  source: src/
+  # Prisma スキーマ
+  prisma_schema: prisma/schema.prisma
+  # マイグレーションファイル
+  migrations: prisma/migrations/
+  # 無視するディレクトリ・ファイル
+  ignore:
+    - node_modules/
+    - .next/
+    - .git/
+    - .env.local
+
+# 環境変数の読み込み
+env:
+  # ローカルの .env ファイルを読み込む
+  load: env.example
+
+# 定義しておきたいタスク
+tasks:
+  # スキーマ整合性チェック
+  check_schema:
+    desc: Prisma schema と実際の DB の整合性を検証
+    cmd:
+      - npx prisma db pull
+      - npx prisma migrate status
+
+  # 不整合検知＆リファクタリング提案
+  refactor:
+    desc: データベース/Prisma モデルの不整合を検出し、リファクタリング案を出力
+
+  # マイグレーション生成サポート
+  migration_generate:
+    desc: マイグレーションファイルを自動生成したいときに実行
+    cmd:
+      - npx prisma migrate dev --name auto_generated
+
+  # クライアント再生成
+  generate_client:
+    desc: Prisma クライアントの再生成
+    cmd:
+      - npx prisma generate
+
