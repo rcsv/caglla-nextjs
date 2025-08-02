@@ -60,8 +60,8 @@ model Profile {
   currencyId String?
   timezone   M_Timezone? @relation(fields: [timezoneId], references: [id])
   timezoneId String?
-  createdAt  DateTime    @default(now())
-  updatedAt  DateTime    @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt @default(now())
 }
 
 model Trip {
@@ -78,7 +78,7 @@ model Trip {
   days       Day[]
   checklist  Checklist[]
   createdAt  DateTime    @default(now())
-  updatedAt  DateTime    @updatedAt
+  updatedAt DateTime @updatedAt @default(now())
 }
 
 model Day {
