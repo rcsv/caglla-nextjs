@@ -5,17 +5,11 @@ import { useRouter } from "next/navigation";
 import dynamic from "next/dynamic";
 import { supabase } from "@/utils/supabase/client";
 import LogoutButton from "@/components/LogoutButton";
+import type { Trip } from "@/types";
 
 const AddTripForm = dynamic(() => import("@/components/AddTripForm"), {
   ssr: false,
 });
-
-type Trip = {
-  id: string;
-  title: string;
-  start_date: string | null;
-  end_date: string | null;
-};
 
 export default function DashboardPage() {
   const router = useRouter();
@@ -47,7 +41,7 @@ export default function DashboardPage() {
       if (error) {
         console.error("Failed to fetch trips:", error.message);
       } else {
-        setTrips(data);
+        setTrips(data as Trip[]);
       }
 
       setLoading(false);

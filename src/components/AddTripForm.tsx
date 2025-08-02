@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { supabase } from "@/utils/supabase/client";
-import type { Trip } from "@/types/trip";
+import type { Trip } from "@/types";
 
 type Props = {
   userId: string;
