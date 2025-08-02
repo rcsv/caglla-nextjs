@@ -33,7 +33,7 @@ export default function DashboardPage() {
       setUserId(session.user.id);
 
       const { data, error } = await supabase
-        .from("Trip")
+        .from("trips")
         .select("*")
         .eq("user_id", session.user.id)
         .order("start_date", { ascending: true });
@@ -41,7 +41,19 @@ export default function DashboardPage() {
       if (error) {
         console.error("Failed to fetch trips:", error.message);
       } else {
-        setTrips(data as Trip[]);
+        const mapped: Trip[] = (data || []).map((t) => ({
+          id: t.id,
+          userId: t.user_id,
+          title: t.title,
+          purpose: t.purpose,
+          startDate: t.start_date,
+          endDate: t.end_date,
+          currencyId: t.currency_id,
+          timezoneId: t.timezone_id,
+          createdAt: t.created_at,
+          updatedAt: t.updated_at,
+        }));
+        setTrips(mapped);
       }
 
       setLoading(false);
@@ -75,7 +87,7 @@ export default function DashboardPage() {
             <li key={trip.id} style={{ marginBottom: "1rem" }}>
               <strong>{trip.title}</strong>
               <br />
-              {trip.start_date} 〜 {trip.end_date}
+              {trip.startDate} 〜 {trip.endDate}
             </li>
           ))}
         </ul>

@@ -20,7 +20,7 @@ export default function AddTripForm({ userId, onCreated, onCancel }: Props) {
     e.preventDefault();
     setLoading(true);
     const { data, error } = await supabase
-      .from("Trip")
+      .from("trips")
       .insert({
         user_id: userId,
         title,
@@ -35,7 +35,19 @@ export default function AddTripForm({ userId, onCreated, onCancel }: Props) {
       return;
     }
     if (data) {
-      onCreated(data as Trip);
+      const trip: Trip = {
+        id: data.id,
+        userId: data.user_id,
+        title: data.title,
+        purpose: data.purpose,
+        startDate: data.start_date,
+        endDate: data.end_date,
+        currencyId: data.currency_id,
+        timezoneId: data.timezone_id,
+        createdAt: data.created_at,
+        updatedAt: data.updated_at,
+      };
+      onCreated(trip);
     }
   };
 

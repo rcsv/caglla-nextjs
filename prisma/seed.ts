@@ -4,7 +4,7 @@ const prisma = new PrismaClient();
 
 async function main() {
   // --- Timezones ---
-  await prisma.m_Timezone.createMany({
+  await prisma.mstTimezone.createMany({
     data: [
       { name: 'JST', offset: '+09:00' },
       { name: 'HST', offset: '-10:00' },
@@ -15,7 +15,7 @@ async function main() {
   });
 
   // --- Locales ---
-  await prisma.m_Locale.createMany({
+  await prisma.mstLocale.createMany({
     data: [
       { code: 'ja-JP', label: '日本語' },
       { code: 'en-US', label: 'English' },
@@ -24,7 +24,7 @@ async function main() {
   });
 
   // --- Currencies ---
-  await prisma.m_Currency.createMany({
+  await prisma.mstCurrency.createMany({
     data: [
       { code: 'JPY', name: 'Japanese Yen', symbol: '¥' },
       { code: 'USD', name: 'US Dollar', symbol: '$' },

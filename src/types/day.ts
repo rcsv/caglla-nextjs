@@ -5,5 +5,7 @@ export type Day = {
     tripId:  string;
     date:    string; // ISO 8601 format
     note?:   string | null;
+    createdAt: string;
+    updatedAt: string;
 };
 
