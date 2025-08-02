@@ -11,6 +11,11 @@ const AddTripForm = dynamic(() => import("@/components/AddTripForm"), {
   ssr: false,
 });
 
+/**
+ * Displays the authenticated user's list of trips, allowing them to add new trips and log out.
+ *
+ * Redirects unauthenticated users to the login page. Fetches and displays trips associated with the current user, and provides a form for creating new trips. Shows loading and empty states as appropriate.
+ */
 export default function DashboardPage() {
   const router = useRouter();
   const [userId, setUserId] = useState<string | null>(null);

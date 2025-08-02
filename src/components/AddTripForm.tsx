@@ -10,6 +10,17 @@ type Props = {
   onCancel: () => void;
 };
 
+/**
+ * Renders a form for creating a new trip associated with a user.
+ *
+ * Allows users to input a trip title, start date, and end date, then submit the form to create a new trip entry. On successful creation, invokes the provided callback with the created Trip object. Also provides a cancel option to abort the creation process.
+ *
+ * @param userId - The identifier of the user creating the trip
+ * @param onCreated - Callback invoked with the created Trip object upon successful creation
+ * @param onCancel - Callback invoked when the user cancels the form
+ *
+ * @returns A React element representing the trip creation form
+ */
 export default function AddTripForm({ userId, onCreated, onCancel }: Props) {
   const [title, setTitle] = useState("");
   const [startDate, setStartDate] = useState("");
