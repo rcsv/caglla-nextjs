@@ -2,6 +2,11 @@
 import { PrismaClient } from '@prisma/client';
 const prisma = new PrismaClient();
 
+/**
+ * Seeds the database with initial timezone, locale, and currency records.
+ *
+ * Inserts predefined data into the `mstTimezone`, `mstLocale`, and `mstCurrency` tables, skipping any duplicate entries.
+ */
 async function main() {
   // --- Timezones ---
   await prisma.mstTimezone.createMany({

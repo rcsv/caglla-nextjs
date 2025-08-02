@@ -11,6 +11,13 @@ const AddTripForm = dynamic(() => import("@/components/AddTripForm"), {
   ssr: false,
 });
 
+/**
+ * Displays the dashboard page for authenticated users, showing their list of trips and allowing trip creation and logout.
+ *
+ * Redirects unauthenticated users to the login page. Fetches and displays trips belonging to the current user, and provides a form to add new trips.
+ *
+ * @returns The dashboard page React element
+ */
 export default function DashboardPage() {
   const router = useRouter();
   const [userId, setUserId] = useState<string | null>(null);
