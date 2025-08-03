@@ -1,5 +1,9 @@
 // prisma/seed.ts
-import { PrismaClient } from '@prisma/client';
+
+import { error } from "console";
+
+//import { PrismaClient } from '@prisma/client';
+const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient();
 
 /**

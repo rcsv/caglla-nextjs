@@ -35,6 +35,6 @@
     "npm": "11.5.1"
   },
   "prisma": {
-    "seed": "ts-node --loader ts-node/esm prisma/seed.ts"
+    "seed": "node prisma/seed.cjs"
   }
 }

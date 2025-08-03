@@ -1,0 +1,183 @@
+-- CreateTable
+CREATE TABLE "public"."mst_currencies" (
+    "id" TEXT NOT NULL DEFAULT uuid_generate_v4(),
+    "code" TEXT NOT NULL,
+    "name" TEXT NOT NULL,
+    "symbol" TEXT,
+    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updated_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+    CONSTRAINT "mst_currencies_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "public"."mst_timezones" (
+    "id" TEXT NOT NULL DEFAULT uuid_generate_v4(),
+    "name" TEXT NOT NULL,
+    "offset" TEXT,
+    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updated_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+    CONSTRAINT "mst_timezones_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "public"."mst_check_items" (
+    "id" TEXT NOT NULL DEFAULT uuid_generate_v4(),
+    "label" TEXT NOT NULL,
+    "category" TEXT,
+    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updated_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+    CONSTRAINT "mst_check_items_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "public"."mst_activities" (
+    "id" TEXT NOT NULL DEFAULT uuid_generate_v4(),
+    "name" TEXT NOT NULL,
+    "category" TEXT,
+    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updated_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+    CONSTRAINT "mst_activities_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "public"."mst_locales" (
+    "id" TEXT NOT NULL DEFAULT uuid_generate_v4(),
+    "code" TEXT NOT NULL,
+    "label" TEXT NOT NULL,
+    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updated_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+    CONSTRAINT "mst_locales_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "public"."profiles" (
+    "id" TEXT NOT NULL DEFAULT uuid_generate_v4(),
+    "user_id" TEXT NOT NULL,
+    "nickname" TEXT,
+    "locale_id" TEXT,
+    "currency_id" TEXT,
+    "timezone_id" TEXT,
+    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updated_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+    CONSTRAINT "profiles_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "public"."trips" (
+    "id" TEXT NOT NULL DEFAULT uuid_generate_v4(),
+    "user_id" TEXT NOT NULL,
+    "title" TEXT NOT NULL,
+    "purpose" TEXT,
+    "start_date" TIMESTAMP(3) NOT NULL,
+    "end_date" TIMESTAMP(3) NOT NULL,
+    "currency_id" TEXT,
+    "timezone_id" TEXT,
+    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updated_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+    CONSTRAINT "trips_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "public"."days" (
+    "id" TEXT NOT NULL DEFAULT uuid_generate_v4(),
+    "trip_id" TEXT NOT NULL,
+    "date" TIMESTAMP(3) NOT NULL,
+    "note" TEXT,
+    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updated_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+    CONSTRAINT "days_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "public"."itineraries" (
+    "id" TEXT NOT NULL DEFAULT uuid_generate_v4(),
+    "day_id" TEXT NOT NULL,
+    "start_time" TIMESTAMP(3) NOT NULL,
+    "end_time" TIMESTAMP(3),
+    "location" TEXT,
+    "memo" TEXT,
+    "activity_id" TEXT,
+    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updated_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+    CONSTRAINT "itineraries_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "public"."checklists" (
+    "id" TEXT NOT NULL DEFAULT uuid_generate_v4(),
+    "trip_id" TEXT NOT NULL,
+    "title" TEXT NOT NULL,
+    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updated_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+    CONSTRAINT "checklists_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "public"."checklist_items" (
+    "id" TEXT NOT NULL DEFAULT uuid_generate_v4(),
+    "checklist_id" TEXT NOT NULL,
+    "checkitem_id" TEXT NOT NULL,
+    "is_checked" BOOLEAN NOT NULL DEFAULT false,
+    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updated_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+    CONSTRAINT "checklist_items_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateIndex
+CREATE UNIQUE INDEX "mst_currencies_code_key" ON "public"."mst_currencies"("code");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "mst_timezones_name_key" ON "public"."mst_timezones"("name");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "mst_activities_name_key" ON "public"."mst_activities"("name");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "mst_locales_code_key" ON "public"."mst_locales"("code");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "profiles_user_id_key" ON "public"."profiles"("user_id");
+
+-- AddForeignKey
+ALTER TABLE "public"."profiles" ADD CONSTRAINT "profiles_locale_id_fkey" FOREIGN KEY ("locale_id") REFERENCES "public"."mst_locales"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "public"."profiles" ADD CONSTRAINT "profiles_currency_id_fkey" FOREIGN KEY ("currency_id") REFERENCES "public"."mst_currencies"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "public"."profiles" ADD CONSTRAINT "profiles_timezone_id_fkey" FOREIGN KEY ("timezone_id") REFERENCES "public"."mst_timezones"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "public"."trips" ADD CONSTRAINT "trips_currency_id_fkey" FOREIGN KEY ("currency_id") REFERENCES "public"."mst_currencies"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "public"."trips" ADD CONSTRAINT "trips_timezone_id_fkey" FOREIGN KEY ("timezone_id") REFERENCES "public"."mst_timezones"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "public"."days" ADD CONSTRAINT "days_trip_id_fkey" FOREIGN KEY ("trip_id") REFERENCES "public"."trips"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "public"."itineraries" ADD CONSTRAINT "itineraries_day_id_fkey" FOREIGN KEY ("day_id") REFERENCES "public"."days"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "public"."itineraries" ADD CONSTRAINT "itineraries_activity_id_fkey" FOREIGN KEY ("activity_id") REFERENCES "public"."mst_activities"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "public"."checklists" ADD CONSTRAINT "checklists_trip_id_fkey" FOREIGN KEY ("trip_id") REFERENCES "public"."trips"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "public"."checklist_items" ADD CONSTRAINT "checklist_items_checklist_id_fkey" FOREIGN KEY ("checklist_id") REFERENCES "public"."checklists"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "public"."checklist_items" ADD CONSTRAINT "checklist_items_checkitem_id_fkey" FOREIGN KEY ("checkitem_id") REFERENCES "public"."mst_check_items"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
