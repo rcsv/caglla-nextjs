@@ -10,6 +10,17 @@ type Props = {
   onCancel: () => void;
 };
 
+/**
+ * Renders a form for creating a new trip associated with a user.
+ *
+ * Allows users to input a trip title, start date, and end date, then submit the form to create a new trip entry. On successful creation, invokes the provided callback with the created Trip object. Also provides a cancel option to abort the creation process.
+ *
+ * @param userId - The identifier of the user creating the trip
+ * @param onCreated - Callback invoked with the created Trip object upon successful creation
+ * @param onCancel - Callback invoked when the user cancels the form
+ *
+ * @returns A React element representing the trip creation form
+ */
 export default function AddTripForm({ userId, onCreated, onCancel }: Props) {
   const [title, setTitle] = useState("");
   const [startDate, setStartDate] = useState("");
@@ -20,7 +31,7 @@ export default function AddTripForm({ userId, onCreated, onCancel }: Props) {
     e.preventDefault();
     setLoading(true);
     const { data, error } = await supabase
-      .from("Trip")
+      .from("trips")
       .insert({
         user_id: userId,
         title,
@@ -35,7 +46,19 @@ export default function AddTripForm({ userId, onCreated, onCancel }: Props) {
       return;
     }
     if (data) {
-      onCreated(data as Trip);
+      const trip: Trip = {
+        id: data.id,
+        userId: data.user_id,
+        title: data.title,
+        purpose: data.purpose,
+        startDate: data.start_date,
+        endDate: data.end_date,
+        currencyId: data.currency_id,
+        timezoneId: data.timezone_id,
+        createdAt: data.created_at,
+        updatedAt: data.updated_at,
+      };
+      onCreated(trip);
     }
   };
 

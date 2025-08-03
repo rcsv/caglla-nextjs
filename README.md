@@ -74,6 +74,10 @@ src/
 └── types/            # 型定義
 ```
 
+## 📚 Database Naming
+
+See [docs/database-naming.md](docs/database-naming.md) for table and field naming conventions.
+
 ## 📄 今後のロードマップ（Roadmap）
 
 -

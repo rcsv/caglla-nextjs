@@ -2,9 +2,12 @@
 import { PrismaClient } from '@prisma/client';
 const prisma = new PrismaClient();
 
+/**
+ * Seeds the database with initial timezone, locale, and currency data if not already present.
+ */
 async function main() {
   // --- Timezones ---
-  await prisma.m_Timezone.createMany({
+  await prisma.mstTimezone.createMany({
     data: [
       { name: 'JST', offset: '+09:00' },
       { name: 'HST', offset: '-10:00' },
@@ -15,7 +18,7 @@ async function main() {
   });
 
   // --- Locales ---
-  await prisma.m_Locale.createMany({
+  await prisma.mstLocale.createMany({
     data: [
       { code: 'ja-JP', label: '日本語' },
       { code: 'en-US', label: 'English' },
@@ -24,7 +27,7 @@ async function main() {
   });
 
   // --- Currencies ---
-  await prisma.m_Currency.createMany({
+  await prisma.mstCurrency.createMany({
     data: [
       { code: 'JPY', name: 'Japanese Yen', symbol: '¥' },
       { code: 'USD', name: 'US Dollar', symbol: '$' },

@@ -4,6 +4,8 @@ export type Checklist = {
     id:     string;
     tripId: string;
     title:  string;
+    createdAt: string;
+    updatedAt: string;
 };
 
 export type ChecklistItem = {
@@ -11,5 +13,7 @@ export type ChecklistItem = {
     checklistId: string;
     checkitemId: string;
     isChecked:   boolean;
+    createdAt:   string;
+    updatedAt:   string;
 };
 

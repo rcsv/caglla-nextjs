@@ -11,110 +11,150 @@ datasource db {
 }
 
 // --- Master Tables ---
-model M_Currency {
-  id       String    @id @default(uuid())
-  code     String    @unique
-  name     String
-  symbol   String?
-  trips    Trip[]
-  profiles Profile[]
+model MstCurrency {
+  id        String     @id @default(uuid())
+  code      String     @unique
+  name      String
+  symbol    String?
+  trips     Trip[]
+  profiles  Profile[]
+  createdAt DateTime   @default(now()) @map("created_at")
+  updatedAt DateTime   @updatedAt @default(now()) @map("updated_at")
+
+  @@map("mst_currencies")
 }
 
-model M_Timezone {
-  id       String    @id @default(uuid())
-  name     String    @unique
-  offset   String?
-  trips    Trip[]
-  profiles Profile[]
+model MstTimezone {
+  id        String     @id @default(uuid())
+  name      String     @unique
+  offset    String?
+  trips     Trip[]
+  profiles  Profile[]
+  createdAt DateTime   @default(now()) @map("created_at")
+  updatedAt DateTime   @updatedAt @default(now()) @map("updated_at")
+
+  @@map("mst_timezones")
 }
 
-model M_CheckItem {
+model MstCheckItem {
   id             String          @id @default(uuid())
   label          String
   category       String?
   checklistItems ChecklistItem[]
+  createdAt      DateTime        @default(now()) @map("created_at")
+  updatedAt      DateTime        @updatedAt @default(now()) @map("updated_at")
+
+  @@map("mst_check_items")
 }
 
-model M_Activity {
+model MstActivity {
   id          String      @id @default(uuid())
   name        String      @unique
   category    String?
   itineraries Itinerary[]
+  createdAt   DateTime    @default(now()) @map("created_at")
+  updatedAt   DateTime    @updatedAt @default(now()) @map("updated_at")
+
+  @@map("mst_activities")
 }
 
-model M_Locale {
-  id       String    @id @default(uuid())
-  code     String    @unique
-  label    String
-  profiles Profile[]
+model MstLocale {
+  id        String     @id @default(uuid())
+  code      String     @unique
+  label     String
+  profiles  Profile[]
+  createdAt DateTime   @default(now()) @map("created_at")
+  updatedAt DateTime   @updatedAt @default(now()) @map("updated_at")
+
+  @@map("mst_locales")
 }
 
 // --- User Related ---
 model Profile {
-  id         String      @id @default(uuid())
-  user_id    String      @unique
+  id         String       @id @default(uuid())
+  userId     String       @unique @map("user_id")
   nickname   String?
-  locale     M_Locale?   @relation(fields: [localeId], references: [id])
-  localeId   String?
-  currency   M_Currency? @relation(fields: [currencyId], references: [id])
-  currencyId String?
-  timezone   M_Timezone? @relation(fields: [timezoneId], references: [id])
-  timezoneId String?
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt @default(now())
+  locale     MstLocale?   @relation(fields: [localeId], references: [id])
+  localeId   String?      @map("locale_id")
+  currency   MstCurrency? @relation(fields: [currencyId], references: [id])
+  currencyId String?      @map("currency_id")
+  timezone   MstTimezone? @relation(fields: [timezoneId], references: [id])
+  timezoneId String?      @map("timezone_id")
+  createdAt  DateTime     @default(now()) @map("created_at")
+  updatedAt  DateTime     @updatedAt @default(now()) @map("updated_at")
+
+  @@map("profiles")
 }
 
 model Trip {
-  id         String      @id @default(uuid())
-  user_id    String
+  id         String       @id @default(uuid())
+  userId     String       @map("user_id")
   title      String
   purpose    String?
-  start_date DateTime
-  end_date   DateTime
-  currency   M_Currency? @relation(fields: [currencyId], references: [id])
-  currencyId String?
-  timezone   M_Timezone? @relation(fields: [timezoneId], references: [id])
-  timezoneId String?
+  startDate  DateTime     @map("start_date")
+  endDate    DateTime     @map("end_date")
+  currency   MstCurrency? @relation(fields: [currencyId], references: [id])
+  currencyId String?      @map("currency_id")
+  timezone   MstTimezone? @relation(fields: [timezoneId], references: [id])
+  timezoneId String?      @map("timezone_id")
   days       Day[]
   checklist  Checklist[]
-  createdAt  DateTime    @default(now())
-  updatedAt DateTime @updatedAt @default(now())
+  createdAt  DateTime     @default(now()) @map("created_at")
+  updatedAt  DateTime     @updatedAt @default(now()) @map("updated_at")
+
+  @@map("trips")
 }
 
 model Day {
-  id          String      @id @default(uuid())
-  trip        Trip        @relation(fields: [tripId], references: [id])
-  tripId      String
-  date        DateTime
-  note        String?
+  id         String      @id @default(uuid())
+  trip       Trip        @relation(fields: [tripId], references: [id])
+  tripId     String      @map("trip_id")
+  date       DateTime
+  note       String?
   itineraries Itinerary[]
+  createdAt  DateTime    @default(now()) @map("created_at")
+  updatedAt  DateTime    @updatedAt @default(now()) @map("updated_at")
+
+  @@map("days")
 }
 
 model Itinerary {
   id         String      @id @default(uuid())
   day        Day         @relation(fields: [dayId], references: [id])
-  dayId      String
-  start_time DateTime
-  end_time   DateTime?
+  dayId      String      @map("day_id")
+  startTime  DateTime    @map("start_time")
+  endTime    DateTime?   @map("end_time")
   location   String?
   memo       String?
-  activity   M_Activity? @relation(fields: [activityId], references: [id])
-  activityId String?
+  activity   MstActivity? @relation(fields: [activityId], references: [id])
+  activityId String?     @map("activity_id")
+  createdAt  DateTime    @default(now()) @map("created_at")
+  updatedAt  DateTime    @updatedAt @default(now()) @map("updated_at")
+
+  @@map("itineraries")
 }
 
 model Checklist {
-  id     String          @id @default(uuid())
-  trip   Trip            @relation(fields: [tripId], references: [id])
-  tripId String
-  title  String
-  items  ChecklistItem[]
+  id         String          @id @default(uuid())
+  trip       Trip            @relation(fields: [tripId], references: [id])
+  tripId     String          @map("trip_id")
+  title      String
+  items      ChecklistItem[]
+  createdAt  DateTime        @default(now()) @map("created_at")
+  updatedAt  DateTime        @updatedAt @default(now()) @map("updated_at")
+
+  @@map("checklists")
 }
 
 model ChecklistItem {
-  id          String      @id @default(uuid())
-  checklist   Checklist   @relation(fields: [checklistId], references: [id])
-  checklistId String
-  checkitem   M_CheckItem @relation(fields: [checkitemId], references: [id])
-  checkitemId String
-  isChecked   Boolean     @default(false)
+  id          String       @id @default(uuid())
+  checklist   Checklist    @relation(fields: [checklistId], references: [id])
+  checklistId String       @map("checklist_id")
+  checkitem   MstCheckItem @relation(fields: [checkitemId], references: [id])
+  checkitemId String       @map("checkitem_id")
+  isChecked   Boolean      @default(false) @map("is_checked")
+  createdAt   DateTime     @default(now()) @map("created_at")
+  updatedAt   DateTime     @updatedAt @default(now()) @map("updated_at")
+
+  @@map("checklist_items")
 }
