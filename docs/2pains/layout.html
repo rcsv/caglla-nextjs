@@ -1,0 +1,163 @@
+<!doctype html>
+<html lang="ja">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Wanderlog風 2ペイン骨格（Grid + Vanilla CSS）</title>
+  <link rel="stylesheet" href="./layout.css" />
+</head>
+
+<body class="has-leftnav-collapsed">
+  <div class="appgrid">
+    <!-- 左ペイン -->
+    <section class="left-pane">
+      <header class="left-header">
+        <button class="btn-leftnav-toggle" aria-label="Toggle left menu">☰</button>
+        <div class="left-header__title">Trip Planner</div>
+        <div class="left-header__spacer"></div>
+        <button class="btn-map-toggle" aria-label="Show map (mobile)">🗺️</button>
+      </header>
+
+      <div class="left-body">
+        <!-- 左メニュー（48px / 188px） -->
+        <nav class="leftnav" aria-label="Sidebar navigation">
+          <ul class="leftnav__items">
+            <li class="item" title="Dashboard">🏠<span class="label">Dashboard</span></li>
+            <li class="item" title="Trips">🧳<span class="label">Trips</span></li>
+            <li class="item" title="Checklist">✅<span class="label">Checklist</span></li>
+            <li class="item" title="Settings">⚙️<span class="label">Settings</span></li>
+          </ul>
+        </nav>
+
+        <!-- メイン -->
+        <main class="main">
+          <article class="card">
+            <h1>メイン（min 385 / max 740）</h1>
+            <p>992px以上：左メニューは常時2カラム（48px / 188px）。</p>
+            <p>768–991px：左メニュー展開時は140pxぶんだけメインに被さる（オーバーレイ）。</p>
+            <p>〜767px：Offcanvas（スライドイン）＋黒い半透明の背景。</p>
+          </article>
+          <article class="card">
+            <h2>ダミーセクション</h2>
+            <p>コンテンツを複数積んでもOK（ヘッダーはsticky）。</p>
+          </article>
+          <article class="card">
+            <h2>もう1枚</h2>
+            <p>スクロール検証用のカード。</p>
+          </article>
+          <h2>もう1枚</h2>
+          <p>スクロール検証用のカード。</p>
+          </article>
+          <h2>もう1枚</h2>
+          <p>スクロール検証用のカード。</p>
+          </article>
+          <h2>もう1枚</h2>
+          <p>スクロール検証用のカード。</p>
+          </article>
+          <h2>もう1枚</h2>
+          <p>スクロール検証用のカード。</p>
+          </article>
+          <h2>もう1枚</h2>
+          <p>スクロール検証用のカード。</p>
+          </article>
+          <h2>もう1枚</h2>
+          <p>スクロール検証用のカード。</p>
+          </article>
+          <h2>もう1枚</h2>
+          <p>スクロール検証用のカード。</p>
+          </article>
+          <h2>もう1枚</h2>
+          <p>スクロール検証用のカード。</p>
+          </article>
+          <h2>もう1枚</h2>
+          <p>スクロール検証用のカード。</p>
+          </article>
+        </main>
+      </div>
+    </section>
+
+    <!-- 右ペイン（マップ） -->
+    <aside class="right-pane" aria-label="Map">
+      <div class="map">
+        <div class="map-canvas">MAP AREA</div>
+
+        <!-- ← これを .map の『内側』に置く -->
+        <div class="map-overlay">
+          <div class="map-overlay-inner">
+            <div class="map-overlay__topleft">
+              <button class="map-btn" aria-label="Search">🔎 検索</button>
+              <div class="map-chip">フィルタ: すべて</div>
+            </div>
+            <div class="map-overlay__topright">
+              <button class="map-btn" aria-label="Zoom in">＋</button>
+              <button class="map-btn" aria-label="Zoom out">−</button>
+            </div>
+          </div>
+
+          <!-- 例: 右下にダイアログ（任意） -->
+          <div class="map-overlay__bottomright">
+            <div class="map-dialog">
+              <strong>選択中:</strong> 東京駅<br />
+              <button class="map-btn">詳細</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </aside>
+
+  </div>
+
+  <!-- モバイル時の黒背景（Offcanvas用） -->
+  <div class="backdrop" aria-hidden="true"></div>
+
+  <script>
+    const body = document.body;
+    const btnNav = document.querySelector('.btn-leftnav-toggle');
+    const btnMap = document.querySelector('.btn-map-toggle');
+    const backdrop = document.querySelector('.backdrop');
+
+    // ≥992px：48px/188px の切替（常時2カラム）
+    btnNav?.addEventListener('click', () => {
+      const w = window.innerWidth;
+      if (w >= 992) {
+        body.classList.toggle('has-leftnav-expanded');
+        body.classList.toggle('has-leftnav-collapsed');
+      } else if (w >= 768) {
+        // 768–991px：左メニューはオーバーレイ（140pxがメインに被さる）
+        body.classList.toggle('overlay-leftnav-open'); // backdropは出さない
+      } else {
+        // <768px：Offcanvas でスライドイン＋黒背景
+        body.classList.toggle('offcanvas-open');
+      }
+    });
+
+    // モバイルで地図全画面トグル（任意）
+    btnMap?.addEventListener('click', () => {
+      const w = window.innerWidth;
+      if (w < 768) {
+        body.classList.toggle('show-map-fullscreen');
+      }
+    });
+
+    // Offcanvas の黒背景クリックで閉じる
+    backdrop?.addEventListener('click', () => {
+      body.classList.remove('offcanvas-open');
+    });
+
+    // 画面幅が変わった時に余計な状態を掃除
+    const cleanState = () => {
+      const w = window.innerWidth;
+      if (w >= 992) {
+        body.classList.remove('overlay-leftnav-open', 'offcanvas-open');
+      } else if (w >= 768) {
+        body.classList.remove('offcanvas-open');
+      } else {
+        body.classList.remove('overlay-leftnav-open');
+      }
+    };
+    window.addEventListener('resize', cleanState);
+  </script>
+</body>
+
+</html>
