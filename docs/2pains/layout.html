@@ -6,6 +6,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Wanderlog風 2ペイン骨格（Grid + Vanilla CSS）</title>
   <link rel="stylesheet" href="./layout.css" />
+  <link rel="stylesheet" href="./zIdx.css" />
+  <link rel="stylesheet" href="./map-component.css" />
 </head>
 
 <body class="has-leftnav-collapsed">
@@ -84,22 +86,50 @@
 
         <!-- ← これを .map の『内側』に置く -->
         <div class="map-overlay">
-          <div class="map-overlay-inner">
-            <div class="map-overlay__topleft">
-              <button class="map-btn" aria-label="Search">🔎 検索</button>
-              <div class="map-chip">フィルタ: すべて</div>
+          <div class="top">
+            <div class="cols flex">
+              <input class="poi-input" placeholder="Search Spot..."/>
+              <div class="chip">Filter: ALL</div>
             </div>
-            <div class="map-overlay__topright">
-              <button class="map-btn" aria-label="Zoom in">＋</button>
-              <button class="map-btn" aria-label="Zoom out">−</button>
+            <div class="cols right">
+              <button class="icon-btn" aria-label="Zoom In">+</button>
+            </div>
+            <div class="cols right">
+              <button class="icon-btn" aria-label="Zoom Out">-</button>
+            </div>
+            <div class="cols right">
+              <button class="icon-btn" aria-label="Current">X</button>
             </div>
           </div>
 
-          <!-- 例: 右下にダイアログ（任意） -->
-          <div class="map-overlay__bottomright">
+          <div class="bottom">
+            <div class="cols flex">
+              <div class="chip">&lt; 1 of 13 &gt;</div>
+              <div class="chip">import</div>
+              <div class="chip">X</div>
+            </div>
             <div class="map-dialog">
-              <strong>選択中:</strong> 東京駅<br />
-              <button class="map-btn">詳細</button>
+              <h1>Dialog</h1>
+              <h1>Dialog</h1>
+              <h1>Dialog</h1>
+              <h1>Dialog</h1>
+              <h1>Dialog</h1>
+              <h1>Dialog</h1>
+              <h1>Dialog</h1>
+              <h1>Dialog</h1>
+              <h1>Dialog</h1>
+              <h1>Dialog</h1>
+              <h1>Dialog</h1>
+              <h1>Dialog</h1>
+              <h1>Dialog</h1>
+              <h1>Dialog</h1>
+              <h1>Dialog</h1>
+              <h1>Dialog</h1>
+              <h1>Dialog</h1>
+              <h1>Dialog</h1>
+              <h1>Dialog</h1>
+              <h1>Dialog</h1>
+              <h1>Dialog</h1>              
             </div>
           </div>
         </div>
