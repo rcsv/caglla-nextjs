@@ -6,8 +6,8 @@ export type MstCurrency = {
     name:      string;
     code:      string;
     symbol?:   string | null;
-    createdAt: string;
-    updatedAt: string;
+    createdAt: string;  // timestamptz
+    updatedAt: string;  // timestamptz
 };
 
 
@@ -16,8 +16,8 @@ export type MstTimezone = {
     id:        string;
     name:      string;
     offset?:   string | null; // e.g., "+09:00"
-    createdAt: string;
-    updatedAt: string;
+    createdAt: string;  // timestamptz
+    updatedAt: string;  // timestamptz
 };
 
 // --- Checklist Item
@@ -25,8 +25,8 @@ export type MstCheckItem = {
     id:        string;
     label:     string;
     category?: string | null; // e.g., "Accommodation", "Transport"
-    createdAt: string;
-    updatedAt: string;
+    createdAt: string;  // timestamptz
+    updatedAt: string;  // timestamptz
 };
 
 // --- Activity
@@ -34,8 +34,8 @@ export type MstActivity = {
     id:        string;
     name:      string;
     category?: string | null; // e.g., "Sightseeing", "Dining"
-    createdAt: string;
-    updatedAt: string;
+    createdAt: string;  // timestamptz
+    updatedAt: string;  // timestamptz
 };
 
 // --- Locale
@@ -43,7 +43,7 @@ export type MstLocale = {
     id:        string;
     code:      string;
     label:     string; // e.g., "en", "ja"
-    createdAt: string;
-    updatedAt: string;
+    createdAt: string;  // timestamptz
+    updatedAt: string;  // timestamptz
 };
 
