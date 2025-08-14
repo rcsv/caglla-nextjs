@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 import dynamic from "next/dynamic";
 import { supabase } from "@/utils/supabase/client";
 import LogoutButton from "@/components/LogoutButton";
@@ -90,7 +91,9 @@ export default function DashboardPage() {
         <ul>
           {trips.map((trip) => (
             <li key={trip.id} style={{ marginBottom: "1rem" }}>
-              <strong>{trip.title}</strong>
+              <strong>
+                <Link href={`/trip/${trip.id}`}>{trip.title}</Link>
+              </strong>
               <br />
               {trip.startDate} 〜 {trip.endDate}
             </li>
